@@ -61,7 +61,7 @@ double Fractal::computeRealFromX(unsigned int x) {
     double f = x / get_width();
 
     // remap x to range(0, complexPlaneWidth)
-    realPart = (f*complexPlaneWidth) + complexPlaneLeftEdge;
+    double realPart = (f*complexPlaneWidth) + complexPlaneLeftEdge;
 
     return realPart;
 }
@@ -70,6 +70,6 @@ double Fractal::computeRealFromX(unsigned int x) {
 // imaginary coordinate on the complex plane
 double Fractal::computeImaginaryFromY(unsigned y) {
     double f = y / get_height();
-    imaginaryPart = (f*complexPlaneHeight) + complexPlaneBottomEdge;
+    double imaginaryPart = (f*complexPlaneHeight) + complexPlaneBottomEdge;
     return imaginaryPart;
 }
