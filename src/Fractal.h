@@ -7,8 +7,6 @@
 #include<iostream>
 #include<omp.h>
 #include "lodepng.h"
-using namespace std;
-
 
 const int MAXITER = 1100;
 const int SUBSAMPLING = 20;
@@ -18,7 +16,7 @@ class Fractal
 public:
     Fractal(unsigned int height, unsigned int width);
     Fractal(double x);
-    ~Fractal();
+    virtual ~Fractal();
     virtual void gen_fractal() = 0;
     bool save_file(string filepath) const;
     unsigned int get_width() const;
