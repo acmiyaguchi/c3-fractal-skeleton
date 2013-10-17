@@ -4,10 +4,10 @@
 
 class Mandelbrot : public Fractal
 {
-	public:
-	Mandelbrot(int height, int width):Fractal(height, width) {}
+public:
+    Mandelbrot(int height, int width):Fractal(height, width) {}
     Mandelbrot(double x):Fractal(x) {}
-	void gen_fractal();
+    void gen_fractal();
 };
 
 
