@@ -18,7 +18,7 @@ public:
     Fractal(double x);
     virtual ~Fractal();
     virtual void gen_fractal() = 0;
-    bool save_file(string filepath) const;
+    bool save_file(std::string filepath) const;
     unsigned int get_width() const;
     unsigned int get_height() const;
 
