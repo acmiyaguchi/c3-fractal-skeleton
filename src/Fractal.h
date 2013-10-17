@@ -21,6 +21,10 @@ public:
     bool save_file(string filepath) const;
     unsigned int get_width() const;
     unsigned int get_height() const;
+
+    //Helper functions
+    double computeRealFromX(unsigned int x);
+    double computeImaginaryFromY(unsigned int y);
 protected:
     unsigned char *m_bitmap;
     unsigned int m_height;

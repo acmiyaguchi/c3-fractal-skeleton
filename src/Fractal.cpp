@@ -3,6 +3,13 @@
 
 using namespace std;
 
+namespace {
+    const double complexPlaneWidth = 3.5;
+    const double complexPlaneLeftEdge = -2.5;
+    const double complexPlaneHeight = 2.0;
+    const double complexPlaneBottomEdge = -1.0;
+}
+
 Fractal::Fractal(unsigned int height, unsigned int width)
 {
     // Pre-allocate memory for the image data
@@ -45,4 +52,24 @@ unsigned int Fractal::get_width() const
 unsigned int Fractal::get_height() const
 {
     return m_height;
+}
+
+// Takes in an x pixel coordinate and converts it into the corresponding
+// real coordinate on the complex plane
+double Fractal::computeRealFromX(unsigned int x) {
+    // x in the range(0, bitmapwidth)
+    double f = x / get_width();
+
+    // remap x to range(0, complexPlaneWidth)
+    realPart = (f*complexPlaneWidth) + complexPlaneLeftEdge;
+
+    return realPart;
+}
+
+// Tkaes in a y pixel coordinate and convertes it into the correpsonding
+// imaginary coordinate on the complex plane
+double Fractal::computeImaginaryFromY(unsigned y) {
+    double f = y / get_height();
+    imaginaryPart = (f*complexPlaneHeight) + complexPlaneBottomEdge;
+    return imaginaryPart;
 }
