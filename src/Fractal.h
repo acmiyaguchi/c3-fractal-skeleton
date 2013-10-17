@@ -25,7 +25,9 @@ public:
     //Helper functions
     double computeRealFromX(unsigned int x);
     double computeImaginaryFromY(unsigned int y);
-protected:
+
+    void setColor(unsigned int x, unsigned int y, unsigned char red, unsigned char green, unsigned char blue, unsigned char alpha = 0xff);
+private:
     unsigned char *m_bitmap;
     unsigned int m_height;
     unsigned int m_width;

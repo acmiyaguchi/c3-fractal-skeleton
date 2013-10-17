@@ -58,7 +58,7 @@ unsigned int Fractal::get_height() const
 // real coordinate on the complex plane
 double Fractal::computeRealFromX(unsigned int x) {
     // x in the range(0, bitmapwidth)
-    double f = x / get_width();
+    double f = (double)x / get_width();
 
     // remap x to range(0, complexPlaneWidth)
     double realPart = (f*complexPlaneWidth) + complexPlaneLeftEdge;
@@ -68,8 +68,17 @@ double Fractal::computeRealFromX(unsigned int x) {
 
 // Tkaes in a y pixel coordinate and convertes it into the correpsonding
 // imaginary coordinate on the complex plane
-double Fractal::computeImaginaryFromY(unsigned y) {
-    double f = y / get_height();
+double Fractal::computeImaginaryFromY(unsigned int y) {
+    double f = (double)y / get_height();
     double imaginaryPart = (f*complexPlaneHeight) + complexPlaneBottomEdge;
     return imaginaryPart;
 }
+
+void Fractal::setColor(unsigned int x, unsigned int y, unsigned char red, unsigned char green, unsigned char blue, unsigned char alpha) {
+    unsigned char* colorbyte = &(m_bitmap[(y*get_width() + x)*4]);
+    *colorbyte = red;
+    *(colorbyte+1) = green;
+    *(colorbyte+2) = blue;
+    *(colorbyte+3) = alpha;
+}
+

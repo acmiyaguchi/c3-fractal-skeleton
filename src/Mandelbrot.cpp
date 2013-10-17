@@ -1,4 +1,5 @@
 #include "Mandelbrot.h"
+#include <iostream>
 
 namespace{
     const int MAX_COUNT = 1000;
@@ -20,23 +21,22 @@ void Mandelbrot::gen_fractal()
 
             //Iterate until we reach 2 or the max
             int count = 0;
-            while(x*x + y*y < 4 && count < MAX_COUNT) {
+            while(x*x + y*y < 4.0 && count < MAX_COUNT) {
                 double xtemp = x*x - y*y + x0;
                 y = 2*x*y + y0;
                 x = xtemp;
                 count++;
             }
-
+            //std::cout << count << " " << x << " " << y << std::endl;
             //Color the pixel
             if(count == MAX_COUNT) {
                 //Its within the set
-                //color = black
+                setColor(i, j, 0, 0xff, 0);
             }
             else {
                 //Not in the set
-                //color = maptocolor(count)
+                setColor(i, j, 0xff, 0xff, 0xff);
             }
-            //set m_bitmap[i*j] -> color
         }
     }
 }
