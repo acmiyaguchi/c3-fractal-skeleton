@@ -24,6 +24,8 @@ void Mandelbrot::gen_fractal()
             double x = 0;
             double y = 0;
 
+            unsigned char rgb[3];
+
             //Iterate until we reach 2 or the max
             int count = 0;
             while(x*x + y*y < 4.0 && count < MAXITER) {
@@ -33,18 +35,21 @@ void Mandelbrot::gen_fractal()
                 count++;
             }
 
-           double iter = count;; 
+           double iter = count; 
             //Color the pixel
             if (count < MAXITER) {
                 double zn = sqrt(x*x + y*y);
                 double mu = log2(log2(zn));
                 iter = count + 1 - mu;
+                //Create the color palatte (0x0, 0xffffff)
+                double color = lerp(floor(iter), floor(iter+1), fmod(iter, 1));
+                double hue = 0.95 * 15 * (color/count);
+                hsvToRgb(hue, 0.8, 1.0, rgb);
+                setColor(i, j, rgb[0], rgb[1], rgb[2]);
             }
-            //Create the color palatte (0x0, 0xffffff)
-            double color1 = iter/MAXITER;
-            unsigned int color = ~(unsigned int)(color1*0xffffff);
-            //double color2 = color
-            setColor(i, j, (color>>16)&0xff, (color>>8)&0xff, color&0xff);
+            else {
+                setColor(i, j, 0, 0, 0);
+            }
         }
     }
 }

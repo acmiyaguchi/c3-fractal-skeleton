@@ -82,3 +82,26 @@ void Fractal::setColor(unsigned int x, unsigned int y, unsigned char red, unsign
     *(colorbyte+3) = alpha;
 }
 
+//Convert from hsv to rgb values
+void Fractal::hsvToRgb(double h, double s, double v, unsigned char rgb[]) {
+    double r, g, b;
+
+    int i = (int)(h*6);
+    double f = h * 6 - i;
+    double p = v * (1 - s);
+    double q = v * (1 - f * s);
+    double t = v * (1 - (1 - f) * s);
+
+     switch(i % 6){
+         case 0: r = v, g = t, b = p; break;
+         case 1: r = q, g = v, b = p; break;
+         case 2: r = p, g = v, b = t; break;
+         case 3: r = p, g = q, b = v; break;
+         case 4: r = t, g = p, b = v; break;
+         case 5: r = v, g = p, b = q; break;
+     }
+
+     rgb[0] = r * 255;
+     rgb[1] = g * 255;
+     rgb[2] = b * 255;
+}
