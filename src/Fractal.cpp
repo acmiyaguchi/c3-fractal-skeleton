@@ -4,8 +4,8 @@
 using namespace std;
 
 namespace {
-    const double complexPlaneWidth = 3.5;
-    const double complexPlaneLeftEdge = -2.5;
+    const double complexPlaneWidth = 2;
+    const double complexPlaneLeftEdge = -1.5;
     const double complexPlaneHeight = 2.0;
     const double complexPlaneBottomEdge = -1.0;
 }
