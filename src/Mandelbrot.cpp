@@ -1,8 +1,13 @@
 #include "Mandelbrot.h"
 #include <iostream>
+#include <cmath>
+
+using namespace std;
 
 namespace{
-    const int MAX_COUNT = 1000;
+    double lerp(double v0, double v1, double t) {
+        return v0+(v1-v0)*t;
+    }
 }
 
 void Mandelbrot::gen_fractal()
@@ -21,22 +26,25 @@ void Mandelbrot::gen_fractal()
 
             //Iterate until we reach 2 or the max
             int count = 0;
-            while(x*x + y*y < 4.0 && count < MAX_COUNT) {
+            while(x*x + y*y < 4.0 && count < MAXITER) {
                 double xtemp = x*x - y*y + x0;
                 y = 2*x*y + y0;
                 x = xtemp;
                 count++;
             }
-            //std::cout << count << " " << x << " " << y << std::endl;
+
+           double iter = count;; 
             //Color the pixel
-            if(count == MAX_COUNT) {
-                //Its within the set
-                setColor(i, j, 0, 0xff, 0);
+            if (count < MAXITER) {
+                double zn = sqrt(x*x + y*y);
+                double mu = log2(log2(zn));
+                iter = count + 1 - mu;
             }
-            else {
-                //Not in the set
-                setColor(i, j, 0xff, 0xff, 0xff);
-            }
+            //Create the color palatte (0x0, 0xffffff)
+            double color1 = iter/MAXITER;
+            unsigned int color = ~(unsigned int)(color1*0xffffff);
+            //double color2 = color
+            setColor(i, j, (color>>16)&0xff, (color>>8)&0xff, color&0xff);
         }
     }
 }
