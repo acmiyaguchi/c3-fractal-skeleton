@@ -15,7 +15,7 @@ int main(int argc, char *argv[])
     str = (char *) malloc(sizeof(char) * 11);
     if (argc < 3)
     {
-        a = 50;
+        a = 10;
         strcpy(str,"output.png");
     }
     else

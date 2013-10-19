@@ -87,7 +87,7 @@ namespace{
 		rgb[2] = b * 255;
 	}
 
-	__global__ void fractal_kernel(unsigned char* img, unsigned int width, unsigned int height) {
+	__global__ void complex_coord(double* coord, unsigned int width, unsigned int height) {
 		int i = blockIdx.x * blockDim.x + threadIdx.x;
 		int j = blockIdx.y * blockDim.y + threadIdx.y;
 
@@ -98,13 +98,25 @@ namespace{
 		double x0 = computeRealFromX(i, width);
 		double y0 = computeImaginaryFromY(j, height);
 
+		int idx = j*width + i;
+		coord[idx] = x0;
+		coord[idx+1] = y0;
+	}
+	__global__ void fractal_kernel(double* coord, double* iters, unsigned int width, unsigned int height) {
 		//Start z at 0
+				int i = blockIdx.x * blockDim.x + threadIdx.x;
+		int j = blockIdx.y * blockDim.y + threadIdx.y;
+
+		if( i >= width || j >= height)
+			return;
+		int idx = j*width+i;
+
+		double x0 = coord[idx];
+		double y0 = coord[idx+1];
 		double x = 0;
 		double y = 0;
 		double x2 = 0.0;
 		double y2 = 0.0;
-
-		unsigned char rgb[3];
 
 		//Iterate until we reach 2 or the max
 		int count = 0;
@@ -115,14 +127,29 @@ namespace{
 			y2 = y*y;
 			x2 = x*x;
 		}
+		coord[idx] = x2;
+		coord[idx+1] = y2;
+		iters[idx] = (double)count;
+	}
+	__global__ void color_fractal(unsigned char* img, double* coord, double* iters, unsigned int width, unsigned int height) {
+		int i = blockIdx.x * blockDim.x + threadIdx.x;
+		int j = blockIdx.y * blockDim.y + threadIdx.y;
+		if( i >= width || j >= height)
+			return;
+		int idx = j*width+i;
 
-		double iter;
+		double iter = iters[idx];
+		double x2 = coord[idx];
+		double y2 = coord[idx+1];
+
+		unsigned char rgb[3];
+
 		//Color the pixel
-		if (count == MAXITER) {
+		if ((unsigned int)iter == MAXITER) {
 			setColor(img, i, j, width, 0, 0, 0);
 		}
 		else {
-			iter = dist((double)count, x2, y2);
+			iter = dist(iter, x2, y2);
 			//Create the color palatte (0x0, 0xffffff)
 			double color = lerp(floor(iter), floor(iter+1), fmod(iter, 1.0));
 			double hue = 0.95 * 10 * (color/MAXITER);
@@ -132,6 +159,7 @@ namespace{
 	}
 }
 
+// Keep track of the complex coordinates and the iteration count in multiple kernels
 void Mandelbrot::gen_fractal()
 {
 	unsigned int dimx = get_width();
@@ -139,9 +167,13 @@ void Mandelbrot::gen_fractal()
 	unsigned int size = dimx*dimy;
 	unsigned int num_bytes = size*4*sizeof(unsigned char);
 
+	double* d_complex;
+	double* d_iters;
+	cudaErrorCheck(cudaMalloc((void**)&d_complex, size*sizeof(double)));
+	cudaErrorCheck(cudaMalloc((void**)&d_iters, size*sizeof(double)));
 	unsigned char* d_a=0;
 	cudaErrorCheck(cudaMalloc((void**)&d_a, num_bytes));
-	if(0==d_a) {
+	if(0==d_a || 0 == d_complex || 0 == d_iters) {
 		cout << "Could not allocate memory" << endl;
 		return;
 	}
@@ -155,11 +187,13 @@ void Mandelbrot::gen_fractal()
 	block.y = 16;
 	grid.y = dimy/block.y;
 
-	fractal_kernel<<<grid, block>>>(d_a, dimx, dimy);
-	cudaErrorCheck(cudaPeekAtLastError());
-	cudaErrorCheck(cudaDeviceSynchronize());
+	complex_coord<<<grid, block>>>(d_complex, dimx, dimy);
+	fractal_kernel<<<grid, block>>>(d_complex, d_iters, dimx, dimy);
+	color_fractal<<<grid, block>>>(d_a, d_complex, d_iters, dimx, dimy);
 
 	cudaErrorCheck(cudaMemcpy(m_bitmap, d_a, num_bytes,cudaMemcpyDeviceToHost));
 	
 	cudaFree(d_a);
+	cudaFree(d_iters);
+	cudaFree(d_complex);
 }
