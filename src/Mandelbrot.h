@@ -1,4 +1,3 @@
-#include <cmath>
 #include <cstdlib>
 #include "Fractal.h"
 
