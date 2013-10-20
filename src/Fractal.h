@@ -8,7 +8,7 @@
 #include<omp.h>
 #include "lodepng.h"
 
-const int MAXITER = 1500;
+const int MAXITER = 10000;
 const int SUBSAMPLING = 20;
 
 class Fractal

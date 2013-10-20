@@ -15,7 +15,7 @@ int main(int argc, char *argv[])
     str = (char *) malloc(sizeof(char) * 11);
     if (argc < 3)
     {
-        a = 10;
+        a = 35;
         strcpy(str,"output.png");
     }
     else
@@ -25,7 +25,7 @@ int main(int argc, char *argv[])
     }
 
     // Create a fractal object
-    Mandelbrot my_fractal(a);
+	Mandelbrot my_fractal(a);
     cout << "Fractal Allocated" << endl;
 
     // Generate the fractal

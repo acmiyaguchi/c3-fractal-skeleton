@@ -1,4 +1,4 @@
-#include "Buddhabrot.h"
+/*#include "Buddhabrot.h"
 using namespace std;
 
 void Buddhabrot::gen_fractal()
@@ -30,6 +30,6 @@ void Buddhabrot::gen_fractal()
     // Parallelizing is not required, but will save you a lot of time.
 
 
-}
+}*/
 
 

@@ -23,10 +23,11 @@ void Mandelbrot::gen_fractal()
 {
     unsigned int img_width = get_width();
     unsigned int img_height = get_height();
-    for(unsigned int i = 0; i < img_width; i++) {
-        for(unsigned int j = 0; j < img_height; j++) {
+	#pragma omp parallel for
+	for(int i = 0; i < img_width; i++) {
+		double x0 = computeRealFromX(i);
+        for(int j = 0; j < img_height; j++) {
             //Convert from screen coordinates to complex coordinates
-            double x0 = computeRealFromX(i);
             double y0 = computeImaginaryFromY(j);
 
             //Start z at 0
@@ -39,7 +40,7 @@ void Mandelbrot::gen_fractal()
 
             //Iterate until we reach 2 or the max
             int count = 0;
-			for(count = 0; count < MAXITER && ((x2 + y2) < 4.0); count++) {
+			for(count = 0; count < MAXITER && ((x2 + y2) < (2<<16)); count++) {
                 double xtemp = x2 - y2 + x0;
                 y = 2*x*y + y0;
                 x = xtemp;
@@ -51,7 +52,6 @@ void Mandelbrot::gen_fractal()
             //Color the pixel
             if (count == MAXITER) {
 				setColor(i, j, 0, 0, 0);
-
             }
             else {
 				 iter = dist((double)count, x2, y2);
@@ -63,4 +63,5 @@ void Mandelbrot::gen_fractal()
             }
         }
     }
+	
 }
