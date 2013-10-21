@@ -1,5 +1,6 @@
 #include "Fractal.h"
 #include <iostream>
+#include <fstream>
 
 using namespace std;
 
@@ -35,6 +36,9 @@ Fractal::~Fractal()
 
 bool Fractal::save_file(string filename) const
 {
+	ofstream outfile("img.dump", ofstream::binary);
+	outfile.write((const char*)m_bitmap, m_height*m_width*4*sizeof(unsigned char));
+	cout << "Wrote binary to file" << endl;
     unsigned error = lodepng::encode(filename.c_str(), m_bitmap, m_width, m_height);
     if (error)
     {

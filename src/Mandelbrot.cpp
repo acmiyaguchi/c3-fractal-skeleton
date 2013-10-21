@@ -57,7 +57,7 @@ void Mandelbrot::gen_fractal()
 				 iter = dist((double)count, x2, y2);
                 //Create the color palatte (0x0, 0xffffff)
                 double color = lerp(floor(iter), floor(iter+1), fmod(iter, 1));
-                double hue = 0.95 * 10 * (color/MAXITER);
+                double hue = 0.95 * 20 * (color/MAXITER);
                 hsvToRgb(hue, 0.6, 1.0, rgb);
                 setColor(i, j, rgb[0], rgb[1], rgb[2]);
             }

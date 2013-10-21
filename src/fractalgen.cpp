@@ -15,7 +15,7 @@ int main(int argc, char *argv[])
     str = (char *) malloc(sizeof(char) * 11);
     if (argc < 3)
     {
-        a = 35;
+        a = 150;
         strcpy(str,"output.png");
     }
     else
@@ -24,6 +24,7 @@ int main(int argc, char *argv[])
         str = argv[2];
     }
 
+	/*
     // Create a fractal object
 	Mandelbrot my_fractal(a);
     cout << "Fractal Allocated" << endl;
@@ -35,7 +36,23 @@ int main(int argc, char *argv[])
     // Save the fractal to a file
     my_fractal.save_file(str);
     cout << "Fractal Saved to file" << endl;
+	*/
 
+	{
+		Mandelbrot fractal(25);
+		fractal.gen_fractal();
+		fractal.save_file("fractal1");
+	}
+	{
+		Mandelbrot fractal(60);
+		fractal.gen_fractal();
+		fractal.save_file("fractal2");
+	}
+	{
+		Mandelbrot fractal(100);
+		fractal.gen_fractal();
+		fractal.save_file("fractal3");
+	}
     if (argc < 3)
     {
         free(str);
